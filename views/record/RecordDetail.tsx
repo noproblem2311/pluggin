@@ -18,7 +18,13 @@ export default function RecordDetail() {
   useEffect(() => {
     dispatch(getRecord(params.id.toString()));
   }, [params.id, dispatch]);
+    // Chuyển đổi notes.array từ chuỗi JSON thành mảng JavaScript
+  const notesArray = record?.notes?.array ? JSON.parse(record.notes.array) : [];
 
+  // Chuyển đổi transcripts.array từ chuỗi JSON thành đối tượng JavaScript
+  const transcriptObject = record?.transcripts?.array ? JSON.parse(record.transcripts.array) : {};
+  
+  console.log(record);
   return (
     <Grid container px={6}>
       <Grid item container xs={12} justifyContent="space-between" alignItems="start" spacing={2}>
@@ -38,7 +44,7 @@ export default function RecordDetail() {
       />
         </Grid>
         <Grid item xs={4}>
-          {record?.notes?.array.map((i: any, j: any) => (
+          {notesArray.map((i: any, j: any) => (
             <Typography key={i} variant="subtitle2" py={0.5}>
               {j+1}.  {i.content}
             </Typography>
@@ -56,7 +62,7 @@ export default function RecordDetail() {
             component="p"
             className="text-xl"
           >
-            {record?.transcripts?.array?.transcript}
+            {transcriptObject?.transcript}
           </Typography>
         </Grid>
       </Grid>

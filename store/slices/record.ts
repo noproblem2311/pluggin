@@ -77,7 +77,7 @@ export function getRecords() {
 export function getRecord(id: string) {
   return async () => {
     try {
-      const response = await axiosServices.get(`/Prod/${id}/`);
+      const response = await axios.get(`https://ixmem9ssq8.execute-api.ap-southeast-2.amazonaws.com/Prod/${id}/`);
       dispatch(slice.actions.getRecordSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
