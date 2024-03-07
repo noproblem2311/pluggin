@@ -27,7 +27,7 @@ export default function RecordItem(item: RecordItemProps) {
     >
       <CardMedia
         component="video"
-        style={{width: 345, height: 180}}
+        style={{width: "100%", height: 180}}
         src={item.videoUrl}
       />
       <CardHeader title={item.title} />
