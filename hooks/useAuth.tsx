@@ -10,12 +10,13 @@ import {
 } from "firebase/auth";
 import { auth } from "../firebase";
 import { useLocalStorage } from "./useLocalStorage";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export const AuthContext = createContext<any>(null);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
+  const pathname  = usePathname();
   const [user, setUser] = useLocalStorage("user", "");
 
   // call this function when you want to authenticate the user
@@ -154,13 +155,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   console.log("user: ", user);
 
+  
   useEffect(() => {
-    if (user) {
-      router.push("/record");
-    } else {
-      router.push("/sign-in");
+    if(!pathname.includes("/record/")){
+
+      if (user ) {
+        router.push("/record");
+      } else {
+        router.push("/sign-in");
+      }
+
     }
-  }, [user]);
+  }, [user,pathname]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
