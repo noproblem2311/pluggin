@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { dispatch } from "..";
 import axios from "axios";
-import axiosServices from "@/utils/axios";
 
 const MOCK_DATA = {
   videoUrl: "https://dscountpython.s3.amazonaws.com//tmp/merged_2d0a346f-67d4-4434-9b13-bf9b9aabe950.mp4",
@@ -66,7 +65,11 @@ export default slice.reducer;
 export function getRecords() {
   return async () => {
     try {
-      const response = await axiosServices.get("/Prod/");
+      const response = await axios.get("https://2e5d751xi4.execute-api.ap-southeast-2.amazonaws.com/Prod/", {
+        headers: {
+          Authorization: window.localStorage.getItem("user")
+        }
+      });
       dispatch(slice.actions.getRecordsSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -77,6 +80,7 @@ export function getRecords() {
 export function getRecord(id: string) {
   return async () => {
     try {
+
       const response = await axios.get(`https://ixmem9ssq8.execute-api.ap-southeast-2.amazonaws.com/Prod/${id}/`);
       dispatch(slice.actions.getRecordSuccess(response.data));
     } catch (error) {

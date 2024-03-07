@@ -10,12 +10,12 @@ export const useLocalStorage = (keyName: string, defaultValue: any) => {
     return value || defaultValue;
   });
 
-  const setValue = (newValue: any) => {
+  const setValue = async (newValue: any)  => {
     try {
       const valueToStore =
         newValue instanceof Function ? newValue(storedValue) : newValue;
       if (typeof window !== "undefined") {
-        localStorage.setItem(keyName, JSON.stringify(valueToStore));
+        localStorage.setItem(keyName,!!newValue === false ? valueToStore :  JSON.stringify(valueToStore));
       }
       setStoredValue(valueToStore);
     } catch (err) {

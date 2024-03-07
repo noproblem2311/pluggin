@@ -32,15 +32,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const user = userCredential.user;
         console.log(user);
         const userId: any = user.uid;
-        setUser(userId);
-
-        const isRecorded = localStorage.getItem("isRecorded");
-
-        if (isRecorded) {
-          addUserIdToRecord(user.uid, isRecorded, () => {});
-        } else {
+        setUser(userId).then(() => {
+        }).finally(() => {
           router.push("/");
-        }
+
+        });
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -129,7 +125,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   // call this function to sign out logged in user
   const logout = () => {
-    setUser(null);
+    localStorage.removeItem("user")
     signOut(auth)
       .then(() => {
         // Sign-out successful.
@@ -139,6 +135,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         // An error happened.
         console.log(error);
       });
+    router.replace("/sign-in")
   };
 
   const value = useMemo(
@@ -157,16 +154,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   
   useEffect(() => {
-    if(!pathname.includes("/record/")){
 
-      if (user ) {
-        router.push("/record");
-      } else {
-        router.push("/sign-in");
-      }
+    console.log("dasdasdasdasd", (!user && !pathname.includes("/record/")))
 
+
+    if (pathname.includes("/record/")) {
+      return;
     }
-  }, [user,pathname]);
+    
+    if (!user && !pathname.includes("/record/")) {
+      router.push("/sign-in");
+    }
+  });
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
